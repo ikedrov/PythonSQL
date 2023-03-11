@@ -32,7 +32,7 @@ db.commit()
 print('Added new data')
 
 request = input('1 - new user registration, 2 - authorize, 3 - change password: ')
-if request not in ('1', '2', '3'):
+while request not in ('1', '2', '3'):
     print('Invalid input!')
     request = input('1 - new user registration, 2 - authorize, 3 - change password: ')
 cur.execute('''SELECT * FROM users_data''')
@@ -40,10 +40,13 @@ table = cur.fetchall()
 
 if int(request) == 1:
     login = input('Enter login: ')
-    while any(login in i for i in table):
-        print(f'User {login} already exists')
+    while any(login in i for i in table) or not login:
+        print(f'User {login} already exists or login must not be empty')
         login = input('Enter login: ')
     password = input('Enter password: ')
+    while not password:
+        print('Password must not be empty')
+        password = input('Enter password: ')
     code = input('Enter digital code: ')
     while not code.isdigit():
         code = input('Enter digital code: ')
