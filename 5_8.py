@@ -59,8 +59,10 @@ if int(request) == 1:
 if int(request) == 2:
     login1 = input('Enter login: ')
     password1 = input('Enter password: ')
-    if any(login1 and password1 in i for i in table):
-        print('Successfully authorized')
+    for i in table:
+        if login1 in i and password1 in i:
+            print('Successfully authorized')
+            break
     else:
         print('Invalid login or password')
 
@@ -69,15 +71,18 @@ if int(request) == 3:
     code1 = input('Enter digital code: ')
     while not code1.isdigit():
         code1 = input('Enter digital code: ')
-    if not any(login2 and int(code1) in i for i in table):
-        print('Invalid login or code')
-    else:
-        for i in table:
-            if login2 in i:
-                new_pass = input('Enter new password: ')
-                cur.execute('''UPDATE users_data SET Password = ? WHERE UserID = ?;''', (new_pass, i[0]))
+    for j in table:
+        if login2 in j and int(code1) in j:
+            new_pass = input('Enter new password. Password must consist from only letters or numbers: ')
+            while not new_pass.isalnum():
+                new_pass = input('Enter new password. Password must consist from only letters or numbers: ')
+            else:
+                cur.execute('''UPDATE users_data SET Password = ? WHERE UserID = ?;''', (new_pass, j[0]))
                 db.commit()
                 print('Password changed successfully')
+                break
+    else:
+        print('Invalid login or code')
 
 
 
